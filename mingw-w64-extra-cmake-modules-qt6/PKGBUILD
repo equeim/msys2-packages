@@ -1,0 +1,44 @@
+_realname=extra-cmake-modules
+_commit=41f2e5863b01d86088adf5e2e49ad0871e02117f
+pkgbase=mingw-w64-${_realname}-qt6
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-qt6"
+pkgver=5.240.0
+pkgrel=1
+pkgdesc='Extra CMake modules (mingw-w64)'
+arch=('any')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+url='https://invent.kde.org/frameworks/extra-cmake-modules'
+license=('LGPL')
+groups=("${MINGW_PACKAGE_PREFIX}-kf6")
+depends=("${MINGW_PACKAGE_PREFIX}-cmake")
+makedepends=("${MINGW_PACKAGE_PREFIX}-ninja"
+             "${MINGW_PACKAGE_PREFIX}-python-sphinx"
+             "${MINGW_PACKAGE_PREFIX}-python-requests")
+source=("https://invent.kde.org/frameworks/${_realname}/-/archive/${_commit}/${_realname}-${_commit}.tar.gz")
+sha256sums=('SKIP')
+
+prepare() {
+  cd "${srcdir}/${_realname}-${_commit}"
+}
+
+build() {
+  [[ -d "${srcdir}/build-${MSYSTEM}" ]] && rm -rf "${srcdir}/build-${MSYSTEM}"
+  mkdir -p "${srcdir}/build-${MSYSTEM}" && cd "${srcdir}/build-${MSYSTEM}"
+
+  MSYS2_ARG_CONV_EXCL="-DCMAKE_INSTALL_PREFIX=" \
+  ${MINGW_PREFIX}/bin/cmake.exe \
+    -G "Ninja" \
+    -DCMAKE_INSTALL_PREFIX=${MINGW_PREFIX} \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_HTML_DOCS=OFF \
+    -DBUILD_QTHELP_DOCS=OFF \
+    -DBUILD_TESTING=OFF \
+    ../${_realname}-${_commit}
+
+  ${MINGW_PREFIX}/bin/cmake.exe --build ./
+}
+
+package() {
+  cd "${srcdir}/build-${MSYSTEM}"
+  DESTDIR="${pkgdir}" ${MINGW_PREFIX}/bin/cmake.exe --install .
+}
