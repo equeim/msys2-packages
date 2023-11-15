@@ -58,8 +58,7 @@ _kde_f6_build_env() {
 
 _variant=-${KF6_VARIANT:-shared}
 _kde_f6_init_package "${_variant}" "kwidgetsaddons"
-_commit=012c14d1f5883b866ac47fad011608dfcf849df5
-pkgver=5.240.0
+pkgver=5.245.0
 pkgrel=1
 arch=('any')
 mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
@@ -76,7 +75,7 @@ else
   depends+=("${MINGW_PACKAGE_PREFIX}-qt6-base")
 fi
 groups=("${MINGW_PACKAGE_PREFIX}-kf6")
-source=("https://invent.kde.org/frameworks/${_basename}/-/archive/${_commit}/${_basename}-${_commit}.tar.gz")
+source=("https://invent.kde.org/frameworks/${_basename}/-/archive/v${pkgver}/${_basename}-v${pkgver}.tar.gz")
 sha256sums=('SKIP')
 
 prepare() {
@@ -99,7 +98,7 @@ build() {
       -DBUILD_TESTING=OFF \
       -DECM_DIR=${MINGW_PREFIX}/share/ECM \
       "${extra_config[@]}" \
-      ../${_basename}-${_commit}
+      ../${_basename}-v${pkgver}
 
   ${MINGW_PREFIX}/bin/cmake.exe --build ./
 }
