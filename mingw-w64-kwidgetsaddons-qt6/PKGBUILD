@@ -58,7 +58,7 @@ _kde_f6_build_env() {
 
 _variant=-${KF6_VARIANT:-shared}
 _kde_f6_init_package "${_variant}" "kwidgetsaddons"
-pkgver=5.245.0
+pkgver=5.246.0
 pkgrel=1
 arch=('any')
 mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
